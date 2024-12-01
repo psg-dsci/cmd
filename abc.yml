@@ -1,0 +1,26 @@
+trigger:
+  branches:
+    include:
+      - main  # Trigger on push to the main branch
+
+pool:
+  name: 'AzureVM'  # Replace 'AzureVM' with your self-hosted agent pool name
+
+steps:
+# Step 1: Checkout the repository
+- task: Checkout@2
+  displayName: 'Checkout repository'
+
+# Step 2: Install necessary dependencies (if any, like Python and pip)
+- script: |
+    sudo apt-get update
+    sudo apt-get install -y python3 python3-pip
+  displayName: 'Install dependencies'
+
+# Step 3: Give execute permission to the script
+- script: chmod +x run_flask_api.sh
+  displayName: 'Give execute permissions to run_flask_api.sh'
+
+# Step 4: Run the Flask API using the shell script
+- script: ./run_flask_api.sh
+  displayName: 'Run Flask API'
